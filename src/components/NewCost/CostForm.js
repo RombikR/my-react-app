@@ -1,25 +1,7 @@
 import React, { useState } from "react";
 import './CostForm.css';
 
-const CostForm = () => {
-
-    /*********************** подход 1 ***********/
-    const [name, setName] = useState('');
-    const [amount, setAmount] = useState('');
-    const [date, setDate] = useState('');
-
-    const nameChangeHandler = (enent) => {
-        setName(enent.target.value);
-    }
-
-    const amountChangeHandler = (enent) => {
-        setAmount(enent.target.value);
-    }
-
-    const dateChangeHandler = (enent) => {
-        setDate(enent.target.value);
-    }
-    /******************************************* */
+const CostForm = (props) => {
 
     /*********************** подход 2 ***********//*
     const [userInput, setUserInput]  = useState({
@@ -28,73 +10,127 @@ const CostForm = () => {
         date: ''
     })
 
-    const nameChangeHandler = (enent) => {
+    const nameChangeHandler = (event) => {
         setUserInput({
             ...userInput,
-            name: enent.target.value
+            name: event.target.value
         })
     }
 
-    const amountChangeHandler = (enent) => {
+    const amountChangeHandler = (event) => {
         setUserInput({
             ...userInput,
-            amount: enent.target.value
+            amount: event.target.value
         })
     }
 
-    const dateChangeHandler = (enent) => {
+    const dateChangeHandler = (event) => {
         setUserInput({
             ...userInput,
-            date: enent.target.value
+            date: event.target.value
         })
     }
     /******************************************* */
-    /*********************** подход 3 ***********//*
+    /*********************** подход 3 ************/
+    // когда зависим от предыдущего состояния (например счетчики) используем этот вариант
+    /*
     const [userInput, setUserInput]  = useState({
         name: '',
         amount: '',
         date: ''
     })
-    const nameChangeHandler = (enent) => {
+    const nameChangeHandler = (event) => {
         setUserInput((previousState) => {
             return {
                 ...previousState,
-                name: enent.target.value
+                name: event.target.value
             }
         })
     }
-    const amountChangeHandler = (enent) => {
+    const amountChangeHandler = (event) => {
         setUserInput((previousState) => {
             return {
                 ...previousState,
-                amount: enent.target.value
+                amount: event.target.value
             }
         })
     }
-    const dateChangeHandler = (enent) => {
+    const dateChangeHandler = (event) => {
         setUserInput((previousState) => {
             return {
                 ...previousState,
-                date: enent.target.value
+                date: event.target.value
             }
         })
     }
     /******************************************* */
 
+    /*********************** подход 1 ************/
+    // получаем состояния
+    const [inputName, setInputName] = useState('');
+    const [inputAmount, setInputAmount] = useState('');
+    const [inputDate, setInputDate] = useState('');
+
+    const nameChangeHandler = (event) => {
+        setInputName(event.target.value);
+    }
+
+    const amountChangeHandler = (event) => {
+        setInputAmount(event.target.value);
+    }
+
+    const dateChangeHandler = (event) => {
+        setInputDate(event.target.value);
+    }
+    /******************************************* */
+
+    const submitHandler = (event) => {
+        event.preventDefault();
+
+        const costData = {
+            name: inputName,
+            amount: inputAmount,
+            date: new Date(inputDate)
+        };
+
+
+        props.onSaveCostData(costData);
+
+        setInputName("");
+        setInputAmount("");
+        setInputDate("");
+    }
+
     return (
-        <form>
+        <form onSubmit={submitHandler}>
             <div className="new-cost__controls">
                 <div className="new-cost__control">
                     <label>Название</label>
-                    <input type="text" onChange={nameChangeHandler}/>
+                    <input 
+                        value={inputName} 
+                        onChange={nameChangeHandler}
+                        type="text" 
+                    />
                  </div>
                  <div className="new-cost__control">
                     <label>Сумма</label>
-                    <input type="number" min="0.01" step="0.01" onChange={amountChangeHandler}/>
+                    <input
+                        value={inputAmount} 
+                        onChange={amountChangeHandler}
+                        type="number" 
+                        min="0.01" 
+                        step="0.01" 
+                    />
                  </div>
                  <div className="new-cost__control">
                     <label>Дата</label>
-                    <input type="date" min="2019-01-01" step="2024-12-31" onChange={dateChangeHandler}/>
+                    <input 
+                        value={inputDate} 
+                        onChange={dateChangeHandler}
+                        type="date" 
+                        min="2019-01-01" 
+                        step="2024-12-31" 
+                    />
                  </div>
                  <div className="new-cost__actions">
                     <button type="submit">Добавить расход</button>

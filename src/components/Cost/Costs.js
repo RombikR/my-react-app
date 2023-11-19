@@ -1,51 +1,30 @@
-import CostItem from "./CostItem";
 import "./Costs.css";
 import Card from "../UI/Card";
-import CostFilter from "./CostFilter";
+import CostsFilter from "./CostsFilter";
 import React, { useState } from "react";
+import CostList from "./CostList";
+import CostsDiagram from "./CostsDiagram";
 
 const Costs = (props) => {
-    /*const costItemProp = props.costs;
-    const rows = [];
-    for (var i = 0; i < costItemProp.length; i++){
-        rows.push(<CostItem 
-            date={costItemProp[i].date}
-            description={costItemProp[i].description}
-            amount={costItemProp[i].amount}
-           />);
-    }
-    return (
-        <div className="costs">{rows}</div>
-    );*/
+  const [selectedYear, setSelectedYear] = useState("2021");
 
-    const [selectYear, setSelectYear] = useState('2019');
+  const yearChangeHandler = (year) => {
+    setSelectedYear(year);
+  };
 
-    const yearChangeHandler = (year) => {
-        setSelectYear(year);
-    };
+  const filteredCosts = props.costs.filter((cost) => {
+    return cost.date.getFullYear().toString() === selectedYear;
+  });
 
-    return (
-        <div>
-            
-        <Card className="costs">
-        <CostFilter year={selectYear} onChangeYear={yearChangeHandler}/>
-        <CostItem 
-        date={props.costs[0].date}
-        description={props.costs[0].description}
-        amount={props.costs[0].amount}
-       />
-      <CostItem 
-        date={props.costs[1].date}
-        description={props.costs[1].description}
-        amount={props.costs[1].amount}
-        />
-      <CostItem 
-        date={props.costs[2].date}
-        description={props.costs[2].description}
-        amount={props.costs[2].amount}
-        />
-        </Card>
-        </div>
-    )      
-}
+  return (
+    <div>
+      <Card className="costs">
+        <CostsFilter year={selectedYear} onChangeYear={yearChangeHandler} />
+        <CostsDiagram costs={filteredCosts} />
+        <CostList costs={filteredCosts} />
+      </Card>
+    </div>
+  );
+};
+
 export default Costs;

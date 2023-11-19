@@ -9,21 +9,18 @@ const CostForm = (props) => {
         amount: '',
         date: ''
     })
-
     const nameChangeHandler = (event) => {
         setUserInput({
             ...userInput,
             name: event.target.value
         })
     }
-
     const amountChangeHandler = (event) => {
         setUserInput({
             ...userInput,
             amount: event.target.value
         })
     }
-
     const dateChangeHandler = (event) => {
         setUserInput({
             ...userInput,
@@ -88,7 +85,7 @@ const CostForm = (props) => {
         event.preventDefault();
 
         const costData = {
-            name: inputName,
+            description: inputName,
             amount: inputAmount,
             date: new Date(inputDate)
         };
@@ -134,6 +131,7 @@ const CostForm = (props) => {
                  </div>
                  <div className="new-cost__actions">
                     <button type="submit">Добавить расход</button>
+                    <button type="button" onClick={props.onCancel}>Отмена</button>
                  </div>
             </div>
         </form>
